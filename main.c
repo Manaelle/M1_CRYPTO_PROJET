@@ -11,6 +11,8 @@
 #include <errno.h>
 #include <linux/random.h>
 
+#include <math.h>
+
 #include "tczero.h"
 #include "cbc.h"
 #include "birthday_attack.h"
@@ -34,11 +36,15 @@ int main(){
 
     //GENERATION DU MESSAGE + INITIALISATION
     srand(time(NULL));
+
+    long long int taille_message=(pow(2,HALF_BLOCK_SIZE)+1)*HALF_BLOCK_SIZE*2 ;
     uint8_t M[SIZE_MESSAGE] = "coucou, je suis un message très important à crypter !"; //rappel : les caractères sont sur 8bits.
 
 	uint64_t key[2];
 	uint8_t* pt = (uint8_t*)M;
-    uint8_t* ct = malloc(SIZE_MESSAGE*sizeof(uint8_t)); //rappel : allocation de 512bits
+    
+    //uint8_t* ct = malloc(SIZE_MESSAGE*sizeof(uint8_t)); //rappel : allocation de 512bits
+    uint8_t* ct = malloc(taille_message*sizeof(uint8_t));
     uint8_t *pt_dec = malloc(SIZE_MESSAGE*sizeof(uint8_t));
 	
     
@@ -68,6 +74,14 @@ int main(){
 
     free(ct);
     free(pt_dec);
+
+    //ATTACK
+    
+    
+    pt = creation_message();
+    printf("pt = %d\n",pt[1]);
+    cbc_enc(key, pt, ct,taille_message/8 );
+    printf("le xor = %hhn\n",pt);
 
 
 }
