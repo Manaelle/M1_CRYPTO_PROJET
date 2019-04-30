@@ -2,6 +2,8 @@
 #define CBC
 
 //-----------------------------------------------
+void cbc_init();
+
 void print_only_the_printable(char * st, int size);
 
 int test_cbc_enc_determinism(uint64_t key[2], uint8_t *pt, size_t ptlen);
